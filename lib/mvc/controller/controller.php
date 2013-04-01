@@ -27,8 +27,9 @@ class UBP_Lib_Mvc_Controller {
 	* 
 	*/
 	public function __construct() {
-		// Instantiate new request object for the controller.
+		// Instantiate new request and response objects for the controller.
 		$this->request =& UBP_Lib_Request::getInstance();
+		$this->response =& UBP_Lib_Response::getInstance();
 	}
 	
 	/**
@@ -38,7 +39,9 @@ class UBP_Lib_Mvc_Controller {
 	*/
 	public function doAction($action) {
 		// Simple action dispatching!
-		$this->response = $this->{$action}();
+		$this->{$action}();
+		// Chaining.
+		return $this;
 	}
 	
 	/**
@@ -66,6 +69,14 @@ class UBP_Lib_Mvc_Controller {
 	*/
 	public function & getRequest() {
 		return $this->request;	
+	}
+	
+	/**
+	* put your comment there...
+	* 
+	*/
+	public function & getResponse() {
+		return $this->response;	
 	}
 	
 } // End class.

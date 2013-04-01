@@ -74,4 +74,18 @@ class UBP_Lib_Request {
 		return $instance;
 	}
 	
+	/**
+	* put your comment there...
+	* 
+	* @param mixed $name
+	* @param mixed $value
+	* @param mixed $type
+	*/
+	public function set($name, $value, $type = 'get') {
+		// Set Request parameter.
+		$this->{$type}[$name] = $value;
+		// Chaining.
+		return $this;
+	}
+	
 } // End class.
