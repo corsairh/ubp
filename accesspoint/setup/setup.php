@@ -13,7 +13,7 @@ class UBP_Accesspoint_Setup {
 	* 
 	*/
 	public function bind() {
-		
+			
 	}
 	
 } // End class.

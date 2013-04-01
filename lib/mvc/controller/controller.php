@@ -18,6 +18,13 @@ class UBP_Lib_Mvc_Controller {
 	/**
 	* put your comment there...
 	* 
+	* @var mixed
+	*/
+	protected $response;
+	
+	/**
+	* put your comment there...
+	* 
 	*/
 	public function __construct() {
 		// Instantiate new request object for the controller.
@@ -51,6 +58,14 @@ class UBP_Lib_Mvc_Controller {
 		$models[$name] = !isset($models[$name]) ? $loader->getInstanceOf('model', $name) :
 																																								$models[$name];
 		return $models[$name];
+	}
+	
+	/**
+	* put your comment there...
+	* 
+	*/
+	public function & getRequest() {
+		return $this->request;	
 	}
 	
 } // End class.

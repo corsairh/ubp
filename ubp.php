@@ -57,7 +57,7 @@ abstract class UBP {
 				$name = $accesspoint['name'];
 				// Access Point class name from name.
 				self::$accesspoints[$name]['instance'] = $loader->getInstanceOf('accesspoint', $name)
-																									->bind();
+																																												->bind();
 			}
 		}
 	}

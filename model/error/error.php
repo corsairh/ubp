@@ -6,12 +6,7 @@
 /**
 * 
 */
-class UBP_Model_Error extends UBP_Lib_Mvc_Model {
-	
-	/**
-	* 
-	*/
-	const ACCESS_KEY = 'ubp_secure_access_key';
+class UBP_Model_Error {
 	
 	/**
 	* put your comment there...
@@ -55,10 +50,40 @@ class UBP_Model_Error extends UBP_Lib_Mvc_Model {
 		$key['time'] = time();
 		$key['plugin'] = $plugin;
 		// Add key database, saved by name!
-		$keys[$plugin['PluginFile']] = $key;
+		$keys[$plugin['RelFile']] = $key;
 		// Save to database.
 		update_option(self::ACCESS_KEY, $keys);
 		return $key['hash'];
+	}
+	
+	/**
+	* Get Plugin relative path to the main file from
+	* the given plugin directory name.
+	* 
+	* @param mixed $PluginDirectory
+	* @return string Relative path to Plugin main file.
+	*/
+	public function getPluginMainFile($PluginDirectory) {
+		// Initialize.
+		$pluginFile = FALSE;
+		// Read all active plugins.
+		$acPlugins = get_option('active_plugins');
+		if (!is_array($acPlugins)) {
+			$acPlugins = array();
+		}
+		// Search key if the plugin dir name with / appened
+		// to ensure its not another plugin start with the same name (e.g test, test-2)!
+		$searchKey = "{$PluginDirectory}/";
+		// Search 'active_plugins' to find the plugin main file path.
+		foreach ($acPlugins as $cRelFile) {
+			// Plugin found!
+			if (strpos($cRelFile, $searchKey) === 0) {
+				// Build OS-Based path!
+				$pluginFile = $PluginDirectory . DIRECTORY_SEPARATOR . basename($cRelFile);
+				break;
+			}
+		}
+		return $pluginFile;
 	}
 	
 	/**
@@ -70,14 +95,15 @@ class UBP_Model_Error extends UBP_Lib_Mvc_Model {
 		// Inijtialize.
 		$plugin = null;
 		// Get plugin data only if the provided file is for Plugin.
-		if ($relFile = $this->isPluginFile($file)) {
+		if ($pluginFile = $this->isPluginFile($file)) {
 			// Import get_plugin_data php file!
 			require_once ABSPATH . 'wp-admin' . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'plugin.php';
 			// Get Plugin data.
-			$plugin = get_plugin_data($file, false);
+			$plugin = get_plugin_data($pluginFile['abs'], false);
 			// Push rel file into Plugin data.
-			$plugin['PluginFile'] = $relFile;
-			$plugin['File'] = $file;
+			$plugin['ErrorFile'] = $file;
+			$plugin['File'] = $pluginFile['abs'];
+			$plugin['RelFile'] = $pluginFile['rel'];
 		}
 		return $plugin;
 	}
@@ -88,14 +114,24 @@ class UBP_Model_Error extends UBP_Lib_Mvc_Model {
 	* @param mixed $file
 	*/
 	public function isPluginFile($file) {
-		$pluginRelFile = FALSE;
+		$pluginFile = FALSE;
 		/// Get OS-Based Plugins directory path! ///
 		$pathToPluginsDir = dirname(dirname(UBP::FILE));
 		// Check if the error file is belong to a Plugin!
 		if (strpos($file, $pathToPluginsDir) === 0) {
-			$pluginRelFile = str_replace($pathToPluginsDir, '', $file);
+			// Remove plugins directory path.
+			$relFile = str_replace($pathToPluginsDir, '', $file);
+			// Get Plugin dir name by splitting path parts.
+			$relFileArray = explode(DIRECTORY_SEPARATOR, $relFile); 
+			$pluginDirName = $relFileArray[1];
+			// Get absolute paths to Plugin file.
+			$pluginFileRelPath = $this->getPluginMainFile($pluginDirName);
+			// Get Plugin base file.
+			$pluginFile = array();
+			$pluginFile['rel'] = $pluginFileRelPath;
+			$pluginFile['abs'] = $pathToPluginsDir . DIRECTORY_SEPARATOR . $pluginFileRelPath;
 		}
-		return $pluginRelFile;
+		return $pluginFile;
 	}
 	
 } // End class.
