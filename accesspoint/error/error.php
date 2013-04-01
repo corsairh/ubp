@@ -13,8 +13,11 @@ class UBP_Accesspoint_Error {
 	* 
 	*/
 	public function _error() {
-		// Only load error handling codes/files when shutdown with errors.
-		if ($error = error_get_last()) {
+		// Initialize.
+		$request =& UBP_Lib_Request::getInstance();
+		// Only load error handling codes/files when shutdown with errors
+		// and not in backup mode!
+		if (!$request->get('ubp_backup_key') && ($error = error_get_last())) {
 			// Handle only errors!
 			switch ($error['type']) {
 				case E_COMPILE_ERROR:

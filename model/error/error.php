@@ -41,19 +41,16 @@ class UBP_Model_Error {
 	*/
 	public function genBackupKey($plugin) {
 		// Initialize.
-		$keys = get_option(self::ACCESS_KEY);
-		if (!is_array($keys)) {
-			$keys = array();
+		$key = FALSE;
+		$keys =& UBP_Lib_Backupkeys::getInstance();
+		// Generate key only if there is NO, VALID key exists!
+		if ((!$dbKey = $keys->getPluginKey($plugin['RelFile'])) || !$keys->isValid($dbKey)) {
+			// Generate new key or override an exists invalid key!
+			$key = $keys->generate($plugin);
+			// Saving new key!
+			$keys->save();
 		}
-		// MD5 for time with the unique salt!
-		$key['hash'] = md5(time() . AUTH_SALT);
-		$key['time'] = time();
-		$key['plugin'] = $plugin;
-		// Add key database, saved by name!
-		$keys[$plugin['RelFile']] = $key;
-		// Save to database.
-		update_option(self::ACCESS_KEY, $keys);
-		return $key['hash'];
+		return $key;
 	}
 	
 	/**
