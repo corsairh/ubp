@@ -23,7 +23,7 @@ class UBP_Model_Error {
 	* 
 	* @param Array Backup secure key.
 	* @param Array Plugin data.
-	* @return void.
+	* @return Boolean TRUE is mail being send, FALSE otherwise.
 	*/
 	public function eMailAdmin($key, $plugin) {
 		// Mail fields.
@@ -41,8 +41,9 @@ class UBP_Model_Error {
 			$message .= "{$name} = {$value}\n";
 		}
 		// Send mail.
-		//mail($adminMail, $subject, $message);
-		echo "{$message}<br>";
+		require_once ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'pluggable.php';
+		$result = wp_mail($adminMail, $subject, $message);
+		return $result;
 	}
 	
 	/**
