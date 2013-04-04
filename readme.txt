@@ -1,5 +1,5 @@
 === Uninterrupted Backup Plugin ===
-Tags: plugin, backup, recovery, disable, backdoor, error, blocked, fatal, deactivate
+Tags: uninterrupted plugin, backup, recovery, disable, backdoor, error, blocked, fatal, deactivate, provide, access, path
 Requires at least: 3.5
 Tested up to: 3.5
 Stable tag: 0.1
@@ -16,6 +16,8 @@ to be terminated! UBP then detect if there is any error raised before terminatin
 Plugin.
 
 There is no need to access throught FTP to force Wordpress deactivate the Plugin. You can always use this Plugin to deactivate the target Plugin only with the link sent with the mail.
+
+Whenever you active or deactive a new Plugin, UBP will always put itself as the first Plugin in Wordpress active Plugins queue.
 
 Please note: The Plugin won't install itself while the site is already blocked by the error. UBP must be installed first while the site is fully functional and then it'll help you backing up your site
 if any newly Plugin produced an error.

@@ -4,9 +4,7 @@
 * Plugin URI: http://ubp.wpps.longestvision.com/
 * Author: Ahmed Said
 * Author URI: http://www.longestvision.com
-* Description: Allow site admin to pass-through over site Blocked errors that might caused by other Plugins
-* and provide a backdoor from which site admins can disable the Plugins that cause the site to be blocked.
-* 
+* Description: Detect fatal errors that might be produced by the installed active Plugins, provide secure backdoor for deactivating the target Plugin.
 * Version: 0.1
 * License: GPLv2 or later
 */
