@@ -1,16 +1,27 @@
 <?php
 /**
-* 
+* Access point code for detecting Plugins error!
 */
 
+// No direct access.
+defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
+
 /**
+* Provide error access point code from which 
+* that UBP plugin can detect errors caused by other Plugins.
 * 
+* @author Ahmed Said
 */
 class UBP_Accesspoint_Error {
 
 	/**
-	* put your comment there...
+	* PHP registered shutdown function callback.
 	* 
+	* This function is registered as PHP shutdown function.
+	* it then, when shutdown, look for errors, if found
+	* the Error controller will be loaded to do the job.
+	* 
+	* @return void
 	*/
 	public function _error() {
 		// Initialize.
@@ -33,8 +44,9 @@ class UBP_Accesspoint_Error {
 	}
 		
 	/**
-	* Do listen to Errors!
+	* Look for errors!
 	* 
+	* @return bool TRUE when success, FALSE otherwise.
 	*/
 	public function bind() {
 		// Initialize.

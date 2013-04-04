@@ -1,43 +1,44 @@
 <?php
 /**
-* 
+* Response class file.
 */
 
+// No direct access.
+defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
+
 /**
+* Define a standard way for objects to talk
+* and interacting with each others.
 * 
+* @author Ahmed Said
 */
 class UBP_Lib_Response {
 	
 	/**
-	* put your comment there...
+	* List of the dynamically (run-time) defined
+	* list of parameters created by objects.
 	* 
-	* @var mixed
+	* @var Array
 	*/
 	protected $stores = array();
 	
 	/**
-	* put your comment there...
+	* Read stored value.
 	* 
-	*/
-	public static function & getInstance() {
-		$instance = new UBP_Lib_Response();
-		return $instance;
-	}
-	
-	/**
-	* put your comment there...
-	* 
-	* @param mixed $store
+	* @param mixed Stored value if exists or @default.
+	* @param mixed Default value to return in case the store not exists.
+	* @return mixed Store or Default value.
 	*/
 	public function read($store, $default = null) {
 		return isset($this->stores[$store]) ? $this->stores[$store] : $default;
 	}
 	
 	/**
-	* put your comment there...
+	* Write store data.
 	* 
-	* @param mixed $store
-	* @param mixed $value
+	* @param String Store name.
+	* @param mixed Store value.
+	* @return UBP_Lib_Response Returning $this.
 	*/
 	public function write($store, $value) {
 		// Store value.

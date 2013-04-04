@@ -1,30 +1,40 @@
 <?php
 /**
-* 
+* Controller base class.
 */
 
+// No direct access.
+defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
+
 /**
+* Handling common operations required
+* for instantiating controller classes and for
+* controllers object to interact with the MVC.
 * 
+* @author Ahmed Said
 */
 class UBP_Lib_Mvc_Controller {
 	
 	/**
-	* put your comment there...
+	* Request object tha defined the request parameters 
+	* for the controller.
 	* 
-	* @var mixed
+	* @var UBP_Lib_Request
 	*/
 	protected $request;
 	
 	/**
-	* put your comment there...
+	* Response object to define the output/returns
+	* from the current controller.
 	* 
-	* @var mixed
+	* @var UBP_Lib_Response
 	*/
 	protected $response;
 	
 	/**
-	* put your comment there...
+	* Initialize object.
 	* 
+	* @return void
 	*/
 	public function __construct() {
 		// Instantiate new request and response objects for the controller.
@@ -33,11 +43,13 @@ class UBP_Lib_Mvc_Controller {
 	}
 	
 	/**
-	* put your comment there...
+	* Dispatch child controller action by the given name.
 	* 
-	* @param mixed $action
+	* @param String action name.
+	* @return UBP_Lib_Mvc_Controller $this.
 	*/
 	public function doAction($action) {
+		// @TODO: Use 'Action' word as trailer for evey action/method name.
 		// Simple action dispatching!
 		$this->{$action}();
 		// Chaining.
@@ -45,9 +57,10 @@ class UBP_Lib_Mvc_Controller {
 	}
 	
 	/**
-	* put your comment there...
+	* Get model object by name.
 	* 
-	* @param mixed $name
+	* @param String model name.
+	* @return Object Model object.
 	*/
 	public function & getModel($name = null) {
 		// Initialize!
@@ -64,16 +77,18 @@ class UBP_Lib_Mvc_Controller {
 	}
 	
 	/**
-	* put your comment there...
+	* Get request object associated with the controller.
 	* 
+	* @return UBP_Lib_Request
 	*/
 	public function & getRequest() {
 		return $this->request;	
 	}
 	
 	/**
-	* put your comment there...
+	* Get response object associated with the controller.
 	* 
+	* @return UBP_Lib_Response
 	*/
 	public function & getResponse() {
 		return $this->response;	

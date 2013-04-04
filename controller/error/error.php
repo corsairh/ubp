@@ -1,16 +1,26 @@
 <?php
 /**
-* 
+* Detecting Plugins error class.
 */
 
+// No direct access.
+defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
+
 /**
+* Handle error detecting operations.
 * 
+* Detect Plugins error! Manage backup key generation.
+* 
+* @author Ahmed Said
 */
 class UBP_Controller_Error extends UBP_Lib_Mvc_Controller {
 
 	/**
-	* put your comment there...
+	* Check if the error is from a Plugin file.
+	* Generate backup key if the target Plugin
+	* is not already has one generated and not expired.
 	* 
+	* @return void
 	*/
 	public function error() {
 		// Initialize!

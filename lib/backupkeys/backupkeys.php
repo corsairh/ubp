@@ -1,34 +1,57 @@
 <?php
 /**
-* 
+* Backup keys management class.
 */
 
+// No direct access.
+defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 
 /**
+* Manage Secure Backup keys for UBP Plugin
 * 
+* From here you can generate, release,
+* check, validate and search Backup keys.
+* 
+* @author Ahmed Said
 */
 class UBP_Lib_Backupkeys {
 	
 	/**
-	* 
+	* Backup key life-time in seconds.
 	*/
 	const KEY_LIFE_TIME_SEC = 86400;
 	
 	/**
-	* 
+	* Wordpress option_name for UBP backup secure keys list.
 	*/
 	const KEYS = 'ubp_secure_access_key';
 	
 	/**
-	* put your comment there...
+	* Backup keys list.
 	* 
-	* @var mixed
+	* The array keys is the relative path to Wordpress-Plugins directory
+	* for the target Plugin (Plugin with the error).
+	* 
+	* The value of the array is array element (key)
+	* with the following properties:
+	* 
+	* 	- @hash String: Secure backup key.
+	* 	- @time: Unix timestamp for the key generated time.
+	* 	- @plugin: Wordpress Plugin data
+	* 		- @Ref: Wordpress Plugin data returned by Wordpress get_plugin_data() function.
+	* 		- @RelFile: Plugin relative path to Wordpress-Plugins directory.
+	* 
+	* @var array
 	*/
 	protected $keys;
 	
 	/**
-	* put your comment there...
+	* Initialize class properties.
 	* 
+	* Use getInstance() for getting object instance
+	* as this class is singlton class.
+	* 
+	* @return void
 	*/
 	protected function __construct() {
 		// Cache Backup keys!
@@ -36,10 +59,10 @@ class UBP_Lib_Backupkeys {
 	}
 	
 	/**
-	* put your comment there...
+	* Generate new Backup secure key for the requested Plugn.
 	* 
-	* @param mixed $pluginFile
-	* @param mixed $key
+	* @param Array Plugin data.
+	* @return array The new generated key.
 	*/
 	public function generate($plugin) {
 		// MD5 for time with the unique salt!
@@ -52,9 +75,16 @@ class UBP_Lib_Backupkeys {
 	}
 	
 	/**
-	* put your comment there...
+	* Get key for the given hash.
 	* 
-	* @param mixed $hash
+	* Search all the exists available keys
+	* for the given hash and return the full key
+	* array.
+	* 
+	* The method is only search for the key and not checking the validity of the hash.
+	* 
+	* @param String Hash key.
+	* @return Array|NULL Key array or null if the hash not exists.
 	*/
 	public function getHashKey($hash) {
 		// Initialize.
@@ -70,8 +100,12 @@ class UBP_Lib_Backupkeys {
 	}
 	
 	/**
-	* put your comment there...
+	* Get UBP_Lib_Backupkeys object.
 	* 
+	* Please note the returned instance is almost shared among all the callers.
+	* Only one instance is allwed.
+	* 
+	* @return UBP_Lib_Backupkeys Keys object.
 	*/
 	public static function & getInstance() {
 		// Don't allow multiple instances!
@@ -84,18 +118,25 @@ class UBP_Lib_Backupkeys {
 	}
 	
 	/**
-	* put your comment there...
+	* Get Backup secure key from Plugin relative file.
 	* 
-	* @param mixed $rFile
+	* The method check the existance of the key 
+	* from Plugin relative path.
+	* 
+	* @param String Plugin relative file.
+	* @return Array/FALSE Backup key or FALSE if not exists.
 	*/
 	public function getPluginKey($rFile) {
 		return isset($this->keys[$rFile]) ? $this->keys[$rFile] : FALSE;
 	}
 	
 	/**
-	* put your comment there...
+	* Check the validity of the key.
 	* 
-	* @param mixed $key
+	* Check if the backup is exists and not expired.
+	* 
+	* @param Array Backup key.
+	* @return Boolean TRUE if valid or FALSE otherwise.
 	*/
 	public function isValid($key) {
 		// Check if the key generation time has passed the LIFE_TIME seconds.
@@ -103,9 +144,10 @@ class UBP_Lib_Backupkeys {
 	}
 	
 	/**
-	* put your comment there...
+	* Release/Delete the given key from the cached keys-list.
 	* 
-	* @param mixed $key
+	* @param Array Key to release.
+	* @return TRUE if deleted (exists), FALSE otherwise.
 	*/
 	public function release($key) {
 		// Initialize.
@@ -125,8 +167,10 @@ class UBP_Lib_Backupkeys {
 	}
 	
 	/**
-	* put your comment there...
+	* Save all the local (cache) changes to the backup keys
+	* into the database
 	* 
+	* @return UBP_Lib_Backupkeys Return $this.
 	*/
 	public function save() {
 		// Save into database.

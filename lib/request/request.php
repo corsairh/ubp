@@ -1,37 +1,46 @@
 <?php
 /**
-* 
+* Request parameters class file.
 */
 
+// No direct access.
+defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
+
 /**
+* Provide access to the request parameters
+* via OOP interface.
 * 
+* @author Ahmed Said.
 */
 class UBP_Lib_Request {
 	
 	/**
-	* put your comment there...
+	* Query string parameters.
 	* 
-	* @var mixed
+	* @var Array
 	*/
 	protected $get;
 	
 	/**
-	* put your comment there...
+	* List of all request objects created via getInstance method.
 	* 
-	* @var mixed
+	* @var Array
 	*/
 	protected static $instances = array();
 	
 	/**
-	* put your comment there...
+	* Post request parameters.
 	* 
-	* @var mixed
+	* @var Array
 	*/
 	protected $post;
 	
 	/**
-	* put your comment there...
+	* Initialize object instantiation.
 	* 
+	* Set both GET and POST request parameters.
+	* 
+	* @return void
 	*/
 	public function __construct() {
 		// GET parameters.
@@ -41,10 +50,10 @@ class UBP_Lib_Request {
 	}
 	
 	/**
-	* put your comment there...
+	* Get parameter value by the giveen name and type.
 	* 
-	* @param mixed $name
-	* @param mixed $type
+	* @param String Parameter name.
+	* @param String get OR post.
 	*/
 	public function get($name, $type = 'get') {
 		// Get request array.
@@ -53,10 +62,11 @@ class UBP_Lib_Request {
 	}
 	
 	/**
-	* put your comment there...
+	* Get request object instance by name or create and associate it
+	* wih the given name.
 	* 
-	* @param mixed $name
-	* @return UBP_Lib_Request
+	* @param String Instance name.
+	* @return UBP_Lib_Request Request object.
 	*/
 	public static function & getInstance($name = null) {
 		// Fetch if exists!
@@ -75,11 +85,13 @@ class UBP_Lib_Request {
 	}
 	
 	/**
-	* put your comment there...
+	* Update/Add parameter value for request parameter
+	* by the given name.
 	* 
-	* @param mixed $name
-	* @param mixed $value
-	* @param mixed $type
+	* @param String Parameter name.
+	* @param String New value.
+	* @param String Type to be get OR post.
+	* @return UBP_Lib_Request Returning $this.
 	*/
 	public function set($name, $value, $type = 'get') {
 		// Set Request parameter.

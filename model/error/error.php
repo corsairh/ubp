@@ -1,24 +1,35 @@
 <?php
 /**
-* 
+* Internal 'Error' functios class.
 */
 
+// No direct access.
+defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
+
 /**
+* Model for handling and detecting Errors.
 * 
+* @author Ahmed Said
 */
 class UBP_Model_Error {
 	
 	/**
-	* put your comment there...
+	* Send web master email when a new error
+	* has been detected.
 	* 
-	* @param mixed $key
-	* @param mixed $plugin
+	* Create mail subject and message with a backup link
+	* , send them to asite admin mail as configured in Wordpress
+	* backend general settings page.
+	* 
+	* @param Array Backup secure key.
+	* @param Array Plugin data.
+	* @return void.
 	*/
 	public function eMailAdmin($key, $plugin) {
 		// Mail fields.
 		$adminMail = get_bloginfo('admin_email');
 		// Build backup link!
-		$backupLink = get_bloginfo('wpurl') . "/?ubp_backup_key={$key}";
+		$backupLink = get_bloginfo('wpurl') . "/?ubp_backup_key={$key['hash']}";
 		// Subject!
 		$subject = 'UBP Plugin error detected!';
 		// Mail message.
@@ -35,9 +46,17 @@ class UBP_Model_Error {
 	}
 	
 	/**
-	* put your comment there...
+	* Generate backup key.
 	* 
-	* @param mixed $plugin
+	* Generate key for a Plugin only if there
+	* is no key exists for the same Plugin, results to
+	* send error mail until the key is expired.
+	* 
+	* The main purpose to don't bother site admin with 
+	* many error mail everytime a page is loaded.
+	* 
+	* @param Array Plugin data.
+	* @return Array Backup Key with @plugin data injected.
 	*/
 	public function genBackupKey($plugin) {
 		// Initialize.
@@ -57,7 +76,11 @@ class UBP_Model_Error {
 	* Get Plugin relative path to the main file from
 	* the given plugin directory name.
 	* 
-	* @param mixed $PluginDirectory
+	* Search active_plugtins Wordpress option keys
+	* to find a Plugin path that start up with @pluginDirectory
+	* ended with a slash.
+	* 
+	* @param String Plugin directory.
 	* @return string Relative path to Plugin main file.
 	*/
 	public function getPluginMainFile($PluginDirectory) {
@@ -84,9 +107,16 @@ class UBP_Model_Error {
 	}
 	
 	/**
-	* put your comment there...
+	* Get Plugin dara from a given file.
 	* 
-	* @param mixed $file
+	* The passed file is almost a file whereis the error
+	* is occured. The method goal is to get the Plugin data from
+	* that file.
+	* 
+	* @see UBP_Model_Error::isPluginFile()
+	* 
+	* @param String Absolute path to file.
+	* @return Array/NULL Plugin data or NULL if the file is not belong to a Plugin.
 	*/
 	public function getPluginFromErrorFile($file) {
 		// Inijtialize.
@@ -106,9 +136,16 @@ class UBP_Model_Error {
 	}
 	
 	/**
-	* put your comment there...
+	* Check weather the given file is belong (laying
+	* under Wordpress-Plugin directory) to a Plugin.
 	* 
-	* @param mixed $file
+	* The method mask the passed file with Wordpress-Plugins
+	* directory path and check the result. If there is remaining path
+	* then the file is belong to a Plugion otherwise its not!!
+	* 
+	* @param String Absolute path to file.
+	* @return String/FALSE Relative path a Plugin or FALSE if 
+	* 																	file is not belong to a Plugin.
 	*/
 	public function isPluginFile($file) {
 		$pluginFile = FALSE;

@@ -1,10 +1,28 @@
 <?php
 /**
-* 
+* Automatic classes loading for UBP Plugin
+*
 */
 
+// No direct access.
+defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
+
 /**
+* Manage auto loads for UBP classes.
 * 
+* Any number of instances can be created from this class.
+* Every instance has a base-path and prefix to jailed to.
+* The class then map the requested class file from the class name
+* as each 'Word between '_ character is a directrory name and the final 'Word'
+* is the class directory and cthe lass file name too.
+* 
+* Warning: If multiple instances with the same 'Preifx' created then there're multiple
+* auto load methods registered and therefore multiple methods
+* will try to load the same class. The class is not tested to be used
+* with multiple instances but allow that! However future version would
+* has more enhancements to this class and the mapping mechanism.
+* 
+* @author Ahmed Said.
 */
 class UBP_Lib_Classloader {
 	
@@ -14,30 +32,35 @@ class UBP_Lib_Classloader {
 	const SEPERATOR = '_';
 	
 	/**
-	* put your comment there...
+	* Absolute base path to map the requested class file.
 	* 
-	* @var mixed
+	* @var String Default to empty string.
 	*/
 	protected $basePath = '';
 	
 	/**
-	* put your comment there...
+	* Manage UBP_Lib_Classloader instances only when
+	* created by calling getInstance() method.
 	* 
-	* @var mixed
+	* @var Array Default to empty array.
 	*/
 	protected static $instances = array();
 	
 	/**
-	* put your comment there...
+	* Class prefix used to detect what classes the class
+	* auto-load method should handle.
 	* 
-	* @var mixed
+	* @var String Default is empty string.
 	*/
 	protected $prefix = '';
 	
 	/**
-	* put your comment there...
+	* PHP SPL registered auto load callback method.
 	* 
-	* @param mixed $class
+	* Call this metod directly only if you know what you do.
+	* 
+	* @param String class name
+	* @return void
 	*/
 	public function _autoLoad($className) {
 		$signature = $this->prefix . self::SEPERATOR;
@@ -50,10 +73,11 @@ class UBP_Lib_Classloader {
 	}
 	
 	/**
-	* put your comment there...
+	* Initialize object creation.
 	* 
-	* @param mixed $prefix
-	* @return UBPLibClassLoader
+	* @param String Absolute base path to the directory to map the prefixed class to.
+	* @param String Classes prefix to be handled by the auto-load method.
+	* @return void
 	*/
 	public function __construct($basePath, $prefix) {
 		// Initialize!
@@ -64,10 +88,16 @@ class UBP_Lib_Classloader {
 	}
 	
 	/**
-	* put your comment there...
+	* Build PHP class name from the given type and name.
 	* 
-	* @param mixed $type
-	* @param mixed $name
+	* If you've organized your classes under various categories/directories,
+	* then this method can get you a class name from the relative maps.
+	* 
+	* Example: IF type = database/mysql and name = table
+	* then the final class name is [PREFIX]_database_mysql_table
+	* 
+	* @param String Relative path to the class.
+	* @param String Class name.
 	*/
 	public function buildClassName($type, $name) {
 		// Initialize.
@@ -83,17 +113,22 @@ class UBP_Lib_Classloader {
 	}
 	
 	/**
-	* put your comment there...
+	* Get base path for the autoloader class.
 	* 
+	* @return String Absolute base path for class autoloader.
 	*/
 	public function getBasePath() {
 		return $this->basePath;	
 	}
 	
 	/**
-	* put your comment there...
+	* Get class Absolute file from the requested class name.
 	* 
-	* @param mixed $name
+	* The method doesn't do any kind of check if the path is valid or not.
+	* Even if this function is called with nivalid prefix it'll still return a file path.
+	* 
+	* @param String Class name to map to a file.
+	* @return String Class file.
 	*/
 	public function getClassFile($name) {
 		// Parse name components.
@@ -111,9 +146,16 @@ class UBP_Lib_Classloader {
 	}
 	
 	/**
-	* put your comment there...
+	* Get class name components.
 	* 
-	* @param mixed $class
+	* The returned array has the following properties.
+	* 
+	* 	- @prefix: Class prefix (First entity).
+	* 	- @file: File name with no extension added (Last entity).
+	* 	- @path: Relative path to the class (all the entities between Prefix and Class-Name entities
+	* 								concated with the DIRECTORY_SEPARATOR Char).
+	* 
+	* @param Array Class name components.
 	*/
 	public function getClassNamePathComponent($class) {
 		// Initialize.
@@ -137,9 +179,13 @@ class UBP_Lib_Classloader {
 	}
 	
 	/**
-	* put your comment there...
+	* Create or Get class laoded instance by name.
 	* 
-	* @param mixed $name
+	* @param String name to be associated with the newly created instance
+	* 												or the instance to returned.
+	* @param String Base Path @see __construct
+	* @param String Prefix @see __construct
+	* @return UBP_Lib_Classloader Class loader instance.
 	*/
 	public static function & getInstance($name = null, $basePath = null, $prefix = '') {
 		// Check if exists!
@@ -158,10 +204,10 @@ class UBP_Lib_Classloader {
 	/**
 	* Instantiate a class under specific type and name.
 	* 
-	* @param string Type of the class -- Almost a folder path!
+	* @param string Type of the class -- relative path below BasePath to the class name!
 	* @param string Class name.
 	* @param array Parameters to be passed to the class getInstance method.
-	* @return mixed 
+	* @return mixed Target class object instance
 	*/
 	public function getInstanceOf($type, $name, $parameters = null) {
 		// Defaults.
@@ -184,8 +230,9 @@ class UBP_Lib_Classloader {
 	}
 	
 	/**
-	* put your comment there...
+	* Get prefix aassociated with current Class Loade class.
 	* 
+	* @return String Prefix.
 	*/
 	public function getPrefix() {
 		return $this->prefix;	
