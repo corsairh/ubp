@@ -1,9 +1,9 @@
 <?php
 /**
 * Plugin Name: Uninterrupted Backup Plugin
-* Plugin URI: http://ubp.wpps.longestvision.com/
+* Plugin URI: http://ubp.wpp.longestvision.com/
 * Author: Ahmed Said
-* Author URI: http://www.longestvision.com
+* Author URI: http://ubp.wpp.longestvision.com/
 * Description: Detect fatal errors that might be produced by the installed active Plugins, provide secure backdoor for deactivating the target Plugin.
 * Version: 0.1
 * License: GPLv2 or later
