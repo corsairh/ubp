@@ -23,6 +23,16 @@ class UBP_Lib_Response {
 	protected $stores = array();
 	
 	/**
+	* Instantiate UBP_Lib_Response class.
+	* 
+	* @return UBP_Lib_Response New Instance.
+	*/
+	public static function & getInstance() {
+		$instance = new UBP_Lib_Response();
+		return $instance;
+	}
+	
+	/**
 	* Read stored value.
 	* 
 	* @param mixed Stored value if exists or @default.
