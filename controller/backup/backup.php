@@ -28,17 +28,18 @@ class UBP_Controller_Backup extends UBP_Lib_Mvc_Controller {
 	*/
 	public function backup() {
 		// Initialize.
+		$message = '';
 		$keys = UBP_Lib_Backupkeys::getInstance();
 		// Check if needed to backup!
 		if ($hash = $this->getRequest()->get('ubp_backup_key')) {
 			// Check if valid key + fetch corresponding Plugin/Key!
 			if (!$key = $keys->getHashKey($hash)) {
-				echo 'Access Denied!';
+				$message =  'Access Denied!';
 			}
 			else {
 				// Key is expired!
 				if (!$keys->isValid($key)) {
-					echo "Invalid key!";
+					$message = 'Invalid key!';
 				}
 				else {
 					// Disable plugin!!
@@ -50,9 +51,11 @@ class UBP_Controller_Backup extends UBP_Lib_Mvc_Controller {
 						$keys->save();
 					}
 					// User Notification.
-					echo "Plugin deactivated! Reloading the page will cause the site to load without the arget Plugin!";
+					$message = 'Plugin deactivated! Reloading the page will cause the site to load without the arget Plugin!';
 				}
 			}
+			// Terminate with message.
+			die($message);
 		}
 	}
 	
