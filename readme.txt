@@ -14,6 +14,8 @@ Detect fatal errors that might be produced by the installed active Plugins, prov
 Detect Wordpress Plugins 'Fatal Errors' that might block/prevent site admins from accessing Wordpress admin interface in order to deactivate the Plugin that caused the issue!
 UBP then report/notify (sedning email) site admin with a secure link that valid for 24 hours from which site admin can deactivate the target Plugin by simply clicking the link!
 
+For development state and issue tracking follow the Plugin on [GitHub Respository](https://github.com/xpointer/ubp)
+
 = Mechanism =
 The mechanism of the Plugin is to always put itself as the first Plugin to be executed by Wordpress Plugins system! The Plugin then just stay away and never get itself involved
 until the execution of all the other scripts is then terminated! UBP Plugin role is comes when the script is terminated. It then check if the script is terminated with error. If the script
