@@ -1,5 +1,5 @@
-=== Uninterrupted Backup Plugin ===
-Tags: uninterrupted, plugin, backup, recovery, disable, backdoor, error, blocked, fatal, deactivate, provide, access, path
+=== Uninterrupted Backup ===
+Tags: uninterrupted, backup, recovery, disable, backdoor, error, blocked, fatal, deactivate, provide, access, path
 Requires at least: 3.5
 Tested up to: 3.5
 Stable tag: 0.1

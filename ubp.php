@@ -1,6 +1,6 @@
 <?php
 /**
-* Plugin Name: Uninterrupted Backup Plugin
+* Plugin Name: Uninterrupted Backup
 * Plugin URI: http://ubp.wpp.longestvision.com/
 * Author: Ahmed Said
 * Author URI: http://ubp.wpp.longestvision.com/
