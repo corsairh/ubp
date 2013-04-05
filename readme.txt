@@ -1,5 +1,5 @@
 === Uninterrupted Backup Plugin ===
-Tags: uninterrupted plugin, backup, recovery, disable, backdoor, error, blocked, fatal, deactivate, provide, access, path
+Tags: uninterrupted, plugin, backup, recovery, disable, backdoor, error, blocked, fatal, deactivate, provide, access, path
 Requires at least: 3.5
 Tested up to: 3.5
 Stable tag: 0.1
@@ -9,18 +9,30 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Detect fatal errors that might be produced by the installed active Plugins, provide secure backdoor for deactivating the target Plugin.
 
 == Description ==
+                                   
+= Purpose =
+Detect Wordpress Plugins 'Fatal Errors' that might block/prevent site admins from accessing Wordpress admin interface in order to deactivate the Plugin that caused the issue!
+UBP then report/notify (sedning email) site admin with a secure link that valid for 24 hours from which site admin can deactivate the target Plugin by simply clicking the link!
 
-Detect Wordpress installed active Plugins 'Fatal Errors' that blocked or prevent the site admin from accessing Wordpress backend admin interface to deactivate the Plugin.
-The mechanism of the Plugin is to always put itself at the first of the active Plugins queue so it'll always executed as the first Plugin! When a fatal error raised the PHP script is start
-to be terminated! UBP then detect if there is any error raised before terminating, if Error found it'll then send admin mail with a secure link from which site admin can deactivate the target
-Plugin.
+= Mechanism =
+The mechanism of the Plugin is to always put itself as the first Plugin to be executed by Wordpress Plugins system! The Plugin then just stay away and never get itself involved
+until the execution of all the other scripts is then terminated! UBP Plugin role is comes when the script is terminated. It then check if the script is terminated with error. If the script
+if terminated with error UBP send admin mail with backup link that has a secure key by which UBP give the link owner the permission to disable the target Plugin.
 
-There is no need to access throught FTP to force Wordpress deactivate the Plugin. You can always use this Plugin to deactivate the target Plugin only with the link sent with the mail.
+= Advantages =
+* There is no need to access throught FTP to force Wordpress deactivate the Plugin. You can always use this Plugin to deactivate the target Plugin only with the link sent with the mail.
+* Load minimum codes/scripts that required only to get involved (listen to errors). Load code required to functional only when error detcted.
 
-Whenever you active or deactive a new Plugin, UBP will always put itself as the first Plugin in Wordpress active Plugins queue.
+= Notes =
+* Whenever you active or deactive a Plugin, UBP will always put itself as the first Plugin in Wordpress active Plugins queue.
+* The Plugin won't install itself while the site is already blocked by the error.
+* UBP must be installed first while the site is fully functional and then it'll help you backing up your site if any newly Plugin produced an error.
+* It Won't help you on all type of errors you've in your Wordpress site however it can always give you the chance to get your site functional again after installing any Plugin that prevent you from accessing your backend.
+* It has no admin user interface and therefor not configurable, however next versions will do.
+* Send admin mail whatever 'fatal errors' is detected and it doesn't matter if this error blocked your site or not. It'll also report fatal errors that might happened in a secondary request that doesn't block you from deacivating the Plugin yourself.
 
-Please note: The Plugin won't install itself while the site is already blocked by the error. UBP must be installed first while the site is fully functional and then it'll help you backing up your site
-if any newly Plugin produced an error.
+= Proof Of Concept = 
+I still have many useful ideas and feature to add to the Plugin however the Plugin need users reviews to proof that its really helping and its really need to be improved.
 
 == Installation ==
 
