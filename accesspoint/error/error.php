@@ -50,8 +50,6 @@ class UBP_Accesspoint_Error {
 	*/
 	public function bind() {
 		// Initialize.
-		$bind = false;
-		// Initialize.
 		$request =& UBP_Lib_Request::getInstance();
 		// Run only if not in backup mode!
 		if ($bind = !$request->get('ubp_backup_key')) {
