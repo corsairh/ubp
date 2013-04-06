@@ -22,7 +22,7 @@ class UBP_Controller_Error extends UBP_Lib_Mvc_Controller {
 	* 
 	* @return void
 	*/
-	public function error() {
+	public function errorAction() {
 		// Initialize!
 		$model =& $this->getModel();
 		// Read last error!

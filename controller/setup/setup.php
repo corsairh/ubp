@@ -22,7 +22,7 @@ class UBP_Controller_Setup extends UBP_Lib_Mvc_Controller {
 	* 
 	* @return void
 	*/
-	public function setup() {
+	public function setupAction() {
 		// Initialize.
 		$request =& $this->getRequest();
 		$response =& $this->getResponse();

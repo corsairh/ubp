@@ -49,9 +49,14 @@ class UBP_Lib_Mvc_Controller {
 	* @return UBP_Lib_Mvc_Controller $this.
 	*/
 	public function doAction($action) {
-		// @TODO: Use 'Action' word as trailer for evey action/method name.
+		// Action's method is the action name plus 'Action' term,
+		$methodName = "{$action}Action";
+		// AN it must be exists.
+		if (!method_exists($this, $methodName)) {
+			throw new Exception('Invalid action specified!');
+		}
 		// Simple action dispatching!
-		$this->{$action}();
+		$this->{$methodName}();
 		// Chaining.
 		return $this;
 	}

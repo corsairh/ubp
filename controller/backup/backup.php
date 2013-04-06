@@ -26,7 +26,7 @@ class UBP_Controller_Backup extends UBP_Lib_Mvc_Controller {
 	* 
 	* @return void
 	*/
-	public function backup() {
+	public function backupAction() {
 		// Initialize.
 		$message = '';
 		$keys = UBP_Lib_Backupkeys::getInstance();
