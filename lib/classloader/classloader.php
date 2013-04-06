@@ -132,7 +132,7 @@ class UBP_Lib_Classloader {
 	*/
 	public function getClassFile($name) {
 		// Parse name components.
-		$components = explode(self::SEPERATOR, $name);
+		$components = explode(self::SEPERATOR, strtolower($name));
 		// Remove prefix as it represent the root path to Plugin!
 		unset($components[0]);
 		// Get class folder relative path.
