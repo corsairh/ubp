@@ -99,14 +99,16 @@ class UBP_Lib_Classloader {
 	* @param String Relative path to the class.
 	* @param String Class name.
 	*/
-	public function buildClassName($type, $name) {
+	public function buildClassName($type, $name = null) {
 		// Initialize.
 		$classComponents = array();
 		// Build class name array.
 		$classComponents['prefix'] = $this->prefix;
 		// Replace '/' with underscore (/ is not directory separator, its just our choice!)
 		$classComponents['type'] = ucfirst(str_replace(array('/'), self::SEPERATOR, $type));
-		$classComponents['name'] = ucfirst($name);
+		if ($name) {
+			$classComponents['name'] = ucfirst($name);	
+		}
 		// Build full name with separator.
 		$className = implode(self::SEPERATOR, $classComponents);
 		return $className;
@@ -146,6 +148,30 @@ class UBP_Lib_Classloader {
 	}
 	
 	/**
+	* Get instance of the given class name.
+	* 
+	* @param String Class name to get the instance of.
+	* @param Array|NULL Parameters list.
+	*/
+	public function getClassInstance($className, $parameters = null) {
+		// Defaults.
+		if (!is_array($parameters)) {
+			$parameters = array();
+		}
+		// If has no getInstance static method do normal construction.
+		if (method_exists($className, 'getInstance')) {
+			// Get instance method implemeted and free to use
+			// args list.
+			$instance = call_user_func_array(array($className, 'getInstance'), $parameters);	
+		}
+		else {
+			// Regular construction call with force to use single array args!
+			$instance = new $className($parameters);
+		}
+		return $instance;	
+	}
+	
+	/**
 	* Get class name components.
 	* 
 	* The returned array has the following properties.
@@ -155,7 +181,7 @@ class UBP_Lib_Classloader {
 	* 	- @path: Relative path to the class (all the entities between Prefix and Class-Name entities
 	* 								concated with the DIRECTORY_SEPARATOR Char).
 	* 
-	* @param Array Class name components.
+	* @param String|Object Class name or object instance.
 	*/
 	public function getClassNamePathComponent($class) {
 		// Initialize.
@@ -170,7 +196,8 @@ class UBP_Lib_Classloader {
 		// Get associative/named component instead of indexed!
 		$components['prefix'] = strtolower($rawComponents[0]);
 		$components['file'] = strtolower(end($rawComponents));
-		$components['path'] = '/'; // Default path, if it has no path!
+		$components['extension'] = 'php';
+		$components['path'] = DIRECTORY_SEPARATOR; // Default path, if it has no path!
 		// Get Path!
 		for ($index = 1; ($index < count($rawComponents) - 1); $index++) {
 			$components['path'] .= strtolower($rawComponents[$index]) . DIRECTORY_SEPARATOR;
@@ -178,6 +205,67 @@ class UBP_Lib_Classloader {
 		return ((object) $components);
 	}
 	
+	/**
+	* Get path to a file laying under specific class directory.
+	* 
+	* @param String|Object Class name or object instance to relativate the path to.
+	* @param string File relative path to the class.
+	*/
+	public function getClassRelativeFile($class, $filePath) {
+		// Get class path components.
+		$cpComponents = $this->getClassNamePathComponent($class);
+		// Get OS-Based path.
+		$filePath = $this->getOSBasedPath($filePath);
+		// Prepend (as root) class directory name to the file path.
+		$filePath = $cpComponents->file . DIRECTORY_SEPARATOR . $filePath;
+		// Get relative path to class diectory.
+		$classDirPath = "{$cpComponents->path}{$filePath}";
+		// Absolute path ot the file.
+		return "{$this->basePath}{$classDirPath}";
+	}
+	
+	/**
+	* Get/Enumerate all classes available under specific directory.
+	* 
+	* @param String Relative directory path to $this class loaded insrance basePath.
+	* @return Array Index array contain a list of all classes names found inside $directoryRelPath.
+	*/
+	public function getDirectoryClasses($directoryRelPath) {
+		$classes = array();
+		// Build full/absolute path to directory.
+		$directoryAbsPath = $this->basePath . DIRECTORY_SEPARATOR . $directoryRelPath;
+		// Recursively get all files!
+		$directories = array($directoryAbsPath);
+		do {
+			$currentDirectory = array_pop($directories);
+			$directory = new DirectoryIterator($currentDirectory);
+			// Search all child directories for a php file with the same parent
+			// directory name! We use only classes!
+			foreach ($directory as $file) {
+				// Cache child directory to be crawled later in DO Statement!.
+				if ($file->isDir() && !$file->isDot()) {
+					array_push($directories, $file->getPathname());
+				}
+				else {
+					// Class file must has .php extension.
+					if (($file->getExtension() == 'php')) {
+						// It also must has the same name as its paret directory.
+						$parentDirectory = basename($file->getPath());
+						if ($parentDirectory == $file->getBasename('.php')) {
+							// Get class LINK (directories between name and the base path)
+							// by masking the base path with the file path.
+							$link = dirname(str_replace(($this->basePath . DIRECTORY_SEPARATOR), '', $file->getPath()));
+							// Use parent directory name as class name and LINK as type!
+							$classes[] = $this->buildClassName($link, $parentDirectory);
+						}
+					}
+				}
+			}
+		} while ($directories);
+		// Return classes names.
+		return $classes;
+	}
+
 	/**
 	* Create or Get class laoded instance by name.
 	* 
@@ -209,24 +297,20 @@ class UBP_Lib_Classloader {
 	* @param array Parameters to be passed to the class getInstance method.
 	* @return mixed Target class object instance
 	*/
-	public function getInstanceOf($type, $name, $parameters = null) {
-		// Defaults.
-		if (!is_array($parameters)) {
-			$parameters = array();
-		}
+	public function getInstanceOf($type, $name = null, $parameters = null) {
 		// Build class name.
 		$className = $this->buildClassName($type, $name);
-		// If has no getInstance static method do normal construction.
-		if (method_exists($className, 'getInstance')) {
-			// Get instance method implemeted and free to use
-			// args list.
-			$instance = call_user_func_array(array($className, 'getInstance'), $parameters);	
-		}
-		else {
-			// Regular construction call with force to use single array args!
-			$instance = new $className($parameters);
-		}
-		return $instance;
+		// Instantiate class.
+		return $this->getClassInstance($className, $parameters);
+	}
+	
+	/**
+	* put your comment there...
+	* 
+	* @param mixed $path
+	*/
+	public function getOSBasedPath($path) {
+		return str_replace(array('/'), DIRECTORY_SEPARATOR, $path);
 	}
 	
 	/**

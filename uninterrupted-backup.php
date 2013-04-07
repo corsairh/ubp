@@ -23,8 +23,12 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 abstract class UBP {
 
 	/**
+	* UBP Database version number.
+	*/
+	const DB_VERSION = '0.2';
+	
+	/**
 	* Absolute path to UBP Plugin main file (__FILE__).
-	* 
 	*/
 	const FILE = __FILE__;
 		
@@ -34,16 +38,18 @@ abstract class UBP {
 	* 
 	*/
 	const NAME = 'UBP';
-
+	
 	/**
 	* UBP access points data to be binded.
 	* 
 	* @var array
 	*/
 	protected static $accesspoints = array(
+		array('name' => 'install'),
 		array('name' => 'setup'),
 		array('name' => 'error'),
-		array('name' => 'backup')
+		array('name' => 'backup'),
+		array('name' => 'log'),
 	);
 	
 	/**
