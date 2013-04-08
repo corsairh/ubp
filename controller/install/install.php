@@ -17,7 +17,7 @@ class UBP_Controller_Install extends UBP_Lib_Mvc_Controller {
 	*/
 	public function installAction() {
 		// Initialize.
-		$loader =& UBP_Lib_Classloader::getInstance();
+		$loader =& $this->getLoader();
 		/// Install Database tables. ///
 		// Get all table classes and call 'create' method.
 		$tablesClass = $loader->getDirectoryClasses('table');

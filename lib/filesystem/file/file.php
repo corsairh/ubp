@@ -9,7 +9,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 /**
 * 
 */
-class UBP_Lib_Filesystem_File {
+class UBP_Lib_Filesystem_File extends UBP_Lib_Object {
 
 	/**
 	* put your comment there...

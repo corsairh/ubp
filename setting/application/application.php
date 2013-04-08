@@ -9,7 +9,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 /**
 * 
 */
-class UBP_Setting_Application {
+class UBP_Setting_Application extends UBP_Lib_Object {
 	
 	/**
 	* 

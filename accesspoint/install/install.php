@@ -9,7 +9,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 /**
 * 
 */
-class UBP_Accesspoint_Install {
+class UBP_Accesspoint_Install extends UBP_Lib_Object {
 	
 	/**
 	* put your comment there...
@@ -17,7 +17,7 @@ class UBP_Accesspoint_Install {
 	*/
 	public function bind() {
 		// Get loader instance.
-		$loader =& UBP_Lib_Classloader::getInstance();
+		$loader =& $this->getLoader();
 		// Get UBP Settings class instance.
 		$appSetting = $loader->getInstanceOf('setting', 'application');
 		// Check if need to be installed!

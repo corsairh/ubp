@@ -15,7 +15,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 * 
 * @author Ahmed Said
 */
-class UBP_Accesspoint_Setup {
+class UBP_Accesspoint_Setup extends UBP_Lib_Object {
 		
 	/**
 	* Wordpress filter callback for 'pre_update_option_active_plugins'
@@ -29,7 +29,8 @@ class UBP_Accesspoint_Setup {
 	public function _preUpdateActivePlugins($activePlugins) {
 		// Pass control to Setup Controller.
 		$controller = new UBP_Controller_Setup();
-		$controller->getRequest()->set('plugins', $activePlugins, 'post');
+		$controller->getRequest()->createRegisterType('internal')
+											->set('plugins', $activePlugins, 'internal');
 		// Run setup action.
 		return $controller->doAction('setup')
 		// Return new plugins order to Wordpress filter!

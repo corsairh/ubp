@@ -7,5 +7,5 @@
 	`line` INT(2) NOT NULL,
 	PRIMARY KEY(`code`, `message`, `file`, `line`),
 	INDEX (`pluginId`),
-	KEY (`ref`)
+	UNIQUE (`ref`)
 )

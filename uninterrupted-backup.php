@@ -47,8 +47,8 @@ abstract class UBP {
 	protected static $accesspoints = array(
 		array('name' => 'install'),
 		array('name' => 'setup'),
-		array('name' => 'error'),
 		array('name' => 'backup'),
+		array('name' => 'error'),
 		array('name' => 'log'),
 	);
 	

@@ -9,7 +9,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 /**
 * 
 */
-class UBP_Accesspoint_Log {
+class UBP_Accesspoint_Log extends UBP_Lib_Object {
 	
 	/**
 	* put your comment there...
@@ -36,9 +36,9 @@ class UBP_Accesspoint_Log {
 	*/
 	public function _log($code, $message, $file, $line, $context) {
 		// Read error.
-		$error = compact('code', 'message', 'file', 'line', 'context');
+		$issue = compact('code', 'message', 'file', 'line', 'context');
 		// Dispatch the call to controller.
-		$this->controllerRequest->set('error', $error, 'post');
+		$this->controllerRequest->set('issue', $issue, 'internal');
 		$this->controller->doAction('log');
 		// UBP never handle error, its just log it!
 		return FALSE;
@@ -52,17 +52,18 @@ class UBP_Accesspoint_Log {
 	public function bind() {
 		// Initialize.
 		$request =& UBP_Lib_Request::getInstance();
-		// Run only if not in backup mode!
-		if ($bind = !$request->get('ubp_backup_key')) {
-			// Get loader instance.
-			$loader =& UBP_Lib_Classloader::getInstance();
+		$loader =& $this->getLoader();
+		$appSettings = $loader->getInstanceOf('setting', 'application');
+		// Run only if installed.
+		if ($appSettings->isInstalled()) {
 			// Cache controller object to be used when error triggered.
 			$this->controller = $loader->getInstanceOf('controller', 'log');
-			$this->controllerRequest =& $this->controller->getRequest();
+			// Create register type to communicate internally and hold #refrence to the controller object.
+			$this->controllerRequest =& $this->controller->getRequest()->createRegisterType('internal');
 			// Register error log method.
 			set_error_handler(array($this, '_log'), E_ALL | E_STRICT);
 		}
-		return $bind;
+		return TRUE;
 	}
 	
 } // End class.

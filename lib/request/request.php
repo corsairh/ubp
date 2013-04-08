@@ -12,14 +12,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 * 
 * @author Ahmed Said.
 */
-class UBP_Lib_Request {
-	
-	/**
-	* Query string parameters.
-	* 
-	* @var Array
-	*/
-	protected $get;
+class UBP_Lib_Request extends UBP_Lib_Object {
 	
 	/**
 	* List of all request objects created via getInstance method.
@@ -29,11 +22,11 @@ class UBP_Lib_Request {
 	protected static $instances = array();
 	
 	/**
-	* Post request parameters.
+	* put your comment there...
 	* 
-	* @var Array
+	* @var mixed
 	*/
-	protected $post;
+	protected $register = null;
 	
 	/**
 	* Initialize object instantiation.
@@ -43,10 +36,24 @@ class UBP_Lib_Request {
 	* @return void
 	*/
 	public function __construct() {
+		// Reset!
+		$this->reset();
 		// GET parameters.
-		$this->get = is_array($_GET) ? $_GET : array();		
+		$this->register['get'] = is_array($_GET) ? $_GET : array();		
 		// Assign POST parameters if available.
-		$this->post = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST : array();
+		$this->register['post'] = $_SERVER['REQUEST_METHOD'] == 'POST' ? $_POST : array();
+	}
+	
+	/**
+	* Create new type.
+	* 
+	* @param mixed $name
+	*/
+	public function & createRegisterType($type) {
+		// Add the new type of the register types array.
+		$this->register[$type] = array();
+		// Chaining.
+		return $this;
 	}
 	
 	/**
@@ -57,7 +64,7 @@ class UBP_Lib_Request {
 	*/
 	public function get($name, $type = 'get') {
 		// Get request array.
-		$rParams = $this->{$type};
+		$rParams = $this->register[$type];
 		return isset($rParams[$name]) ? $rParams[$name] : null;
 	}
 	
@@ -85,6 +92,20 @@ class UBP_Lib_Request {
 	}
 	
 	/**
+	* Completely reseting all request parameters type.
+	* 
+	* This methdd is useful 
+	* 
+	* @return UBP_Lib_Request Returning $this.
+	*/
+	public function reset() {
+		// Destroy the exists elements.
+		$this->register = array('get' => array(), 'post' => array());
+		// Chaining.
+		return $this;
+	}
+	
+	/**
 	* Update/Add parameter value for request parameter
 	* by the given name.
 	* 
@@ -95,7 +116,7 @@ class UBP_Lib_Request {
 	*/
 	public function set($name, $value, $type = 'get') {
 		// Set Request parameter.
-		$this->{$type}[$name] = $value;
+		$this->register[$type][$name] = $value;
 		// Chaining.
 		return $this;
 	}

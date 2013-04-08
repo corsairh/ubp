@@ -14,7 +14,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 * 
 * @author Ahmed Said
 */
-class UBP_Lib_Backupkeys {
+class UBP_Lib_Backupkeys extends UBP_Lib_Object {
 	
 	/**
 	* Backup key life-time in seconds.

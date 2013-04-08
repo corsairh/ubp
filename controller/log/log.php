@@ -17,7 +17,7 @@ class UBP_Controller_Log extends UBP_Lib_Mvc_Controller {
 	*/
 	public function logAction() {
 		// Initialize.
-		$error = $this->getRequest()->get('error', 'post');
+		$issue = $this->getRequest()->get('issue', 'internal');
 		// Log error.
 		
 	}

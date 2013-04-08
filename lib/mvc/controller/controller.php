@@ -13,7 +13,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 * 
 * @author Ahmed Said
 */
-class UBP_Lib_Mvc_Controller {
+class UBP_Lib_Mvc_Controller extends UBP_Lib_Object {
 	
 	/**
 	* Request object tha defined the request parameters 

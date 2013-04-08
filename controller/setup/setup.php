@@ -29,7 +29,7 @@ class UBP_Controller_Setup extends UBP_Lib_Mvc_Controller {
 		// Get UB Plugin main file relative path to UB Plugin.
 		$ubpMFRPath = basename(dirname(UBP::FILE)) . '/' . basename(UBP::FILE);
 		// Read plugins!
-		$plugins = $request->get('plugins', 'post');
+		$plugins = $request->get('plugins', 'internal');
 		// Always put the plugin as the first item if its not!
 		$ubpPluginAtIndex = array_search($ubpMFRPath, $plugins);
 		if ($ubpPluginAtIndex) {

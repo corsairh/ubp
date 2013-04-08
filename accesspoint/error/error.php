@@ -12,7 +12,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 * 
 * @author Ahmed Said
 */
-class UBP_Accesspoint_Error {
+class UBP_Accesspoint_Error extends UBP_Lib_Object {
 
 	/**
 	* PHP registered shutdown function callback.
@@ -26,9 +26,8 @@ class UBP_Accesspoint_Error {
 	public function _error() {
 		// Initialize.
 		$request =& UBP_Lib_Request::getInstance();
-		// Only load error handling codes/files when shutdown with errors
-		// and not in backup mode!
-		if (!$request->get('ubp_backup_key') && ($error = error_get_last())) {
+		// Only load error handling codes/files when shutdown with errors.
+		if ($error = error_get_last()) {
 			// Handle only errors!
 			switch ($error['type']) {
 				case E_COMPILE_ERROR:
@@ -51,12 +50,10 @@ class UBP_Accesspoint_Error {
 	public function bind() {
 		// Initialize.
 		$request =& UBP_Lib_Request::getInstance();
-		// Run only if not in backup mode!
-		if ($bind = !$request->get('ubp_backup_key')) {
-			// Handling errors!
-			register_shutdown_function(array($this, '_error'));
-		}
-		return $bind;
+		// Handling errors!
+		register_shutdown_function(array($this, '_error'));
+		// Always successed!
+		return TRUE;
 	}
 
 } // End class.

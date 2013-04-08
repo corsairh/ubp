@@ -12,7 +12,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 * 
 * @author Ahmed Said
 */
-class UBP_Lib_Response {
+class UBP_Lib_Response extends UBP_Lib_Object {
 	
 	/**
 	* List of the dynamically (run-time) defined

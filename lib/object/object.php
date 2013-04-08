@@ -14,22 +14,6 @@ abstract class UBP_Lib_Object {
 	/**
 	* put your comment there...
 	* 
-	* @var mixed
-	*/
-	private $loader = null;
-	
-	/**
-	* put your comment there...
-	* 
-	*/
-	protected function __construct() {
-		// Initiliaze.
-		$this->loader =& UBP_Lib_Classloader::getInstance();
-	}
-	
-	/**
-	* put your comment there...
-	* 
 	*/
 	public function getClassFileName() {
 		// Get class components.
@@ -52,8 +36,8 @@ abstract class UBP_Lib_Object {
 	* put your comment there...
 	* 
 	*/
-	public function getLoader() {
-			return $this->loader;
+	public function & getLoader() {
+			return UBP_Lib_Classloader::getInstance();
 	}
 	
 } // End class.

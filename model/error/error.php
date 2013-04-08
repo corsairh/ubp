@@ -11,7 +11,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 * 
 * @author Ahmed Said
 */
-class UBP_Model_Error {
+class UBP_Model_Error extends UBP_Lib_Object {
 	
 	/**
 	* Send web master email when a new error

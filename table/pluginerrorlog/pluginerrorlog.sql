@@ -1,5 +1,5 @@
 (
 	`requestId` INT(2) NOT NULL,
-	`pluginId` INT(2) NOT NULL,
-	PRIMARY KEY (`requestId`, pluginId)
+	`errorRef` VARCHAR(32) NOT NULL,
+	PRIMARY KEY (`requestId`, `errorRef`)
 )

@@ -9,7 +9,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 /**
 * 
 */
-class UBP_Accesspoint_Uninstall {
+class UBP_Accesspoint_Uninstall extends UBP_Lib_Object {
 
 	/**
 	* put your comment there...
@@ -29,7 +29,7 @@ class UBP_Accesspoint_Uninstall {
 	*/
 	public function bind() {
 		// Initiliaze.
-		$loader =& UBP_Lib_Classloader::getInstance();
+		$loader =& $this->getLoader();
 		$settings = $loader->getInstanceOf('settings');
 		// Register uninstall hook only if installed.
 		if ($settings->isInstalled()) {

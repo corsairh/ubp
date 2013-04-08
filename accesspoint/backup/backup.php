@@ -12,7 +12,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 * 
 * @author Ahmed Said
 */
-class UBP_Accesspoint_Backup {
+class UBP_Accesspoint_Backup extends UBP_Lib_Object {
 
 	/**
 	* Open the access point and put it in action.

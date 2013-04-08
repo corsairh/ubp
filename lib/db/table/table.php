@@ -30,8 +30,6 @@ abstract class UBP_Lib_Db_Table extends UBP_Lib_Object {
 	* 
 	*/
 	public function __construct() {
-		// Initialize parent.
-		parent::__construct();
 		// Get DB driver instance.
 		$this->driver = $this->getLoader()->getInstanceOf('lib/db', 'driver');
 	}
