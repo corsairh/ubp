@@ -70,7 +70,7 @@ class UBP_Lib_Mvc_Controller extends UBP_Lib_Object {
 	public function & getModel($name = null) {
 		// Initialize!
 		static $models = array();
-		$loader =& UBP_Lib_Classloader::getInstance();
+		$loader =& $this->getLoader();
 		// Defaults.
 		if (!$name) {
 			$name = $loader->getClassNamePathComponent($this)->file;

@@ -18,6 +18,7 @@ class UBP_Controller_Install extends UBP_Lib_Mvc_Controller {
 	public function installAction() {
 		// Initialize.
 		$loader =& $this->getLoader();
+		$dbDriver = $loader->getInstanceOf('lib/db', 'driver');
 		/// Install Database tables. ///
 		// Get all table classes and call 'create' method.
 		$tablesClass = $loader->getDirectoryClasses('table');
@@ -25,7 +26,7 @@ class UBP_Controller_Install extends UBP_Lib_Mvc_Controller {
 			// Instantiate the table.
 			$table = $loader->getClassInstance($tableClass);
 			// Create the table.
-			$table->create();
+			$dbDriver->createCommand('ddl', 'create', array($table))->exec();
 		}
 		// Get Plugin settings.
 		$loader->getInstanceOf('setting', 'application')

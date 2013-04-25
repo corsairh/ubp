@@ -14,7 +14,7 @@ class UBP_Lib_Db_Driver extends UBP_Lib_Object {
 	/**
 	* Tables name prefix.
 	*/
-	const TABLE_PREFIX = 'ubp_';
+	const OBJECT_PREFIX = 'ubp_';
 	
 	/**
 	* put your comment there...
@@ -57,30 +57,67 @@ class UBP_Lib_Db_Driver extends UBP_Lib_Object {
 	 // Chaining.
 	 return $this;
 	}
+
+	/**
+	* Get command class instance.
+	* 
+	* @param mixed $type
+	* @param mixed $name
+	* @param mixed $parameters
+	*/
+	public function createCommand($namespace, $name, $parameters = null) {
+		// Initialize.
+		$loader = $this->getLoader();
+		// Add DbDriver (this) as the first parameter!
+		if (!is_array($parameters)) {
+			$parameters = array();
+		}
+		array_unshift($parameters, $this);
+		// Instantiate command class.
+		$absNamespace = "lib/db/command/{$namespace}";
+		// Get command class instance.
+		return $loader->getInstanceOf($absNamespace, $name, $parameters);
+	}
 	
 	/**
 	* put your comment there...
 	* 
-	* @param mixed $statement
+	* @param mixed $object
 	*/
-	public function exec($statement) {
-		// Simply call Wordpress query method.
-		$this->wpdb->query($statement);
-		// Chaining.
-		return $this;
-	}
-
-	/**
-	* put your comment there...
-	* 
-	*/
-	public function getTablePrefix() {
+	public function getDBOPrefix($object = '') {
 		// Initialize.
 		$prefix = array();
 		$prefix['wp'] = $this->wpdb->prefix;
-		$prefix['ubp'] = self::TABLE_PREFIX;
+		$prefix['ubp'] = self::OBJECT_PREFIX;
+		$prefix['object'] = $object;
 		// Concat all prefixes.
 		return implode('', $prefix);
 	}
 
+	/**
+	* Execute/Query The database engine server.
+	* 
+	* @param String The query to be executed.
+	* @return Boolean|Array TRUE for statments that
+	* 																		doesn't has resultset retuned or Array otherwise.
+	* @exception UBP_Lib_Db_Driver_Exception_Queryerror
+	*/
+	public function query($query) {
+		// Simply call Wordpress query method.
+		if (($result = $this->wpdb->query($query)) === FALSE) {
+			throw new UBP_Lib_Db_Driver_Exception_Queryerror($query);
+		}
+		// Chaining.
+		return $result;
+	}
+
+	/**
+	* Get Wordpress Database object instance
+	* that build up current Driver object!
+	* 
+	* @return 
+	*/
+	public function wpdb() {
+		return $this->wpdb;
+	}
 } // End class.

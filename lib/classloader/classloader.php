@@ -66,9 +66,8 @@ class UBP_Lib_Classloader {
 		$signature = $this->prefix . self::SEPERATOR;
 		// Test class name if its laying under our PREFIX!
 		if (strpos($className, $signature) !== FALSE) {
-			$classFile = $this->getClassFile($className);
-			// Import class file.
-			include_once $classFile;
+			// import class file.
+			$this->importClass($className);
 		}
 	}
 	
@@ -154,6 +153,8 @@ class UBP_Lib_Classloader {
 	* @param Array|NULL Parameters list.
 	*/
 	public function getClassInstance($className, $parameters = null) {
+		// Initialize.
+		$instance = null;
 		// Defaults.
 		if (!is_array($parameters)) {
 			$parameters = array();
@@ -164,9 +165,9 @@ class UBP_Lib_Classloader {
 			// args list.
 			$instance = call_user_func_array(array($className, 'getInstance'), $parameters);	
 		}
-		else {
-			// Regular construction call with force to use single array args!
-			$instance = new $className($parameters);
+		else { // Regular __construct call using reflection class.
+			$clsReflection = new ReflectionClass($className);
+			$instance = $clsReflection->newInstanceArgs($parameters);
 		}
 		return $instance;	
 	}
@@ -322,4 +323,16 @@ class UBP_Lib_Classloader {
 		return $this->prefix;	
 	}
 	
+	/**
+	* put your comment there...
+	* 
+	* @param mixed $name
+	*/
+	public function importClass($name) {
+		// Get class file from class name.
+		$classFile = $this->getClassFile($name);
+		// Import class file.
+		include_once $classFile;
+	}
+
 } // End class.

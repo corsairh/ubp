@@ -28,11 +28,26 @@ class UBP_Controller_Error extends UBP_Lib_Mvc_Controller {
 		// Read last error!
 		$error = error_get_last();
 		// Take action only if the error produced by Plugin!
-		if ($plugin = $model->getPluginFromErrorFile($error['file'])) {
+		if ($plugin = UBP_Wordpress_Plugin_Helper::getPluginFromErrorFile($error['file'])) {
 			// Generate backup key, send mail only if there is no key exists for the same Plugin!
 			if ($key = $model->genBackupKey($plugin)) {
 				// Send administrator mail with backup link!!
-				$model->eMailAdmin($key, $plugin);
+				$adminMail = get_bloginfo('admin_email');
+				// Build backup link!
+				$backupLink = get_bloginfo('wpurl') . "/?ubp_backup_key={$key['hash']}";
+				// Subject!
+				$subject = 'UBP Plugin error detected!';
+				// Mail message.
+				$message  = "UBP has detecting Blocked error in your site!\n";
+				$message .= "Use {$backupLink} link to backup/disable the target Plugin\n\n";
+				$message .= "######### Plugin Data ##########\n\n";
+				// Add Plugin details into message.
+				foreach ($plugin as $name => $value) {
+					$message .= "{$name} = {$value}\n";
+				}
+				// Send mail.
+				require_once ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'pluggable.php';
+				$result = wp_mail($adminMail, $subject, $message);
 			}
 		}
 	}

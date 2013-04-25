@@ -12,7 +12,7 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 abstract class UBP_Lib_Object {
 	
 	/**
-	* put your comment there...
+	* Get class file name.
 	* 
 	*/
 	public function getClassFileName() {
@@ -24,7 +24,7 @@ abstract class UBP_Lib_Object {
 	}
 	
 	/**
-	* put your comment there...
+	* Get class file name without the extension part.
 	* 
 	*/
 	public function getClassName() {
