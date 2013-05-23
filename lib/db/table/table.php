@@ -12,6 +12,16 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 abstract class UBP_Lib_Db_Table extends UBP_Lib_Db_Dbo {
 	
 	/**
+	* 
+	*/
+	const PROP_TYPE_GETTER = 'get';
+
+	/**
+	* 
+	*/
+	const PROP_TYPE_SETTER = 'set';
+		
+	/**
 	* put your comment there...
 	* 
 	* @var mixed
@@ -24,13 +34,30 @@ abstract class UBP_Lib_Db_Table extends UBP_Lib_Db_Dbo {
 	* @var mixed
 	*/
 	protected $data = array();
-	
+
 	/**
-	* put your comment there...
+	* Return Table name.
 	* 
-	* @var mixed
+	* @return String Database table name.
 	*/
-	protected $hash = array();
+	public function __toString() {
+		return $this->getDbDriver()->getDBOPrefix($this->name());
+	}
+
+	/**
+	* Get table definition!
+	* 
+	* @return UBP_TableDefinition (not implemeted yet! Now retujrn RAW string).
+	*/
+	public function definition() {
+		// Initialize.
+		$loader =& $this->getLoader();
+		// Get path to the defintion file laying under the DBO  class directory.
+		$definitionFilePath = $loader->getClassRelativeFile($this, ($this->getClassName() . '.sql'));
+		// Get content of the definition file.
+		return UBP_Lib_Filesystem_File::getInstance($definitionFilePath)
+																										->readAll();
+	}
 
 	/**
 	* Fill table object with the given data.
@@ -50,18 +77,33 @@ abstract class UBP_Lib_Db_Table extends UBP_Lib_Db_Dbo {
 	}
 
 	/**
-	* Get table definition!
+	* put your comment there...
 	* 
-	* @return UBP_TableDefinition (not implemeted yet! Now retujrn RAW string).
+	* @param mixed $type
+	* @param mixed $name
 	*/
-	public function getDefinition() {
-		// Initialize.
-		$loader =& $this->getLoader();
-		// Get path to the defintion file laying under the DBO  class directory.
-		$definitionFilePath = $loader->getClassRelativeFile($this, ($this->getClassName() . '.sql'));
-		// Get content of the definition file.
-		return UBP_Lib_Filesystem_File::getInstance($definitionFilePath)
-																										->readAll();
+	public function findPropertyMethod($type, $name) {
+		// Get model method name to call for SET!
+		$capitalizedName = ucfirst($name);
+		$method = "{$type}{$capitalizedName}";
+		// Check if exists
+		if (!method_exists($this, $method)) {
+			echo "{$method}";
+			throw new UBP_Lib_Db_Table_Exception_Modelfilternotexists($type, $name, $method);
+		}
+		return $method;
+	}
+	
+	/**
+	* put your comment there...
+	* 
+	* @param mixed $property
+	*/
+	public function get($property) {
+		// Find property Method name to call!
+		$method = $this->findPropertyMethod(self::PROP_TYPE_GETTER, $property);
+		// Get property value by calling the getter method.
+		return $this->{$method}();
 	}
 
 	/**
@@ -87,16 +129,11 @@ abstract class UBP_Lib_Db_Table extends UBP_Lib_Db_Dbo {
 	* @param mixed $field
 	* @param mixed $value
 	*/
-	public function set($field, $value) {
-		// Get model method name to call for SET!
-		$capitalizedName = ucfirst($field);
-		$modelMethod = "get{$capitalizedName}";
-		// Check if exists
-		if (!method_exists($this, $modelMethod)) {
-			throw new UBP_Lib_Db_Table_Exception_Modelfilternotexists($field, $modelMethod);
-		}
+	public function set($property, $value) {
+		// Find property Method name to call!
+		$method = $this->findPropertyMethod(self::PROP_TYPE_SETTER, $property);
 		// Call the filter.
-		$this->{$modelMethod}($value);
+		$this->{$method}($value);
 		// Chaining.
 		return $this;			
 	}

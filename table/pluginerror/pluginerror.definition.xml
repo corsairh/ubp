@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<table name="plugin_error" xmlns="http://ubp.framework.longestvision.com/configuration/application/database/mysql/table">
+	<fields>
+		<field name="id">
+			<type name="varchar">
+				<length>32</length>
+				<allowNull>false</allowNull>
+			</type>
+		</field>
+		<field name="pluginId">
+			<type name="integer">
+				<length>2</length>
+				<allowNull>false</allowNull>
+			</type>
+		</field>
+		<field name="code">
+			<type name="integer">
+				<length>2</length>
+				<allowNull>false</allowNull>
+			</type>
+		</field>
+		<field name="message">
+			<type name="varchar">
+				<length>400</length>
+				<allowNull>false</allowNull>
+			</type>
+		</field>
+		<field name="file">
+			<type name="varchar">
+				<length>500</length>
+				<allowNull>false</allowNull>
+			</type>
+		</field>
+		<field name="line">
+			<type name="integer">
+				<length>2</length>
+				<allowNull>false</allowNull>
+			</type>
+		</field>
+	</fields>
+	<indexes>
+		<unique>
+			<field>pluginId</field>
+			<field>code</field>
+			<field>message</field>
+			<field>file</field>
+			<field>line</field>
+		</unique>
+		<primary>
+			<field>id</field>
+		</primary>
+	</indexes>
+</table>

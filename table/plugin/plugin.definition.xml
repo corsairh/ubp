@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<table name="plugin" xmlns="http://ubp.framework.longestvision.com/configuration/application/database/mysql/table">
+	<fields>
+		<field name="file">
+			<type name="varchar">
+				<length>100</length>
+				<allowNull>false</allowNull>
+			</type>
+			<comment>Plugin relative path to Wordpress Plugins directory</comment>
+		</field>
+		<field name="id">
+			<type name="integer">
+				<length>2</length>
+				<autoIncrement>true</autoIncrement>
+			</type>
+			<comment>Plugin Unique Identifier</comment>
+		</field>
+	</fields>
+	<indexes>
+		<key>
+			<field>file</field>
+		</key>
+		<primary>
+			<field>id</field>
+		</primary>
+	</indexes>
+</table>

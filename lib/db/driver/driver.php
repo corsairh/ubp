@@ -82,7 +82,28 @@ class UBP_Lib_Db_Driver extends UBP_Lib_Object {
 	/**
 	* put your comment there...
 	* 
-	* @param mixed $object
+	* @param mixed $value
+	*/
+	public function escape(& $value) {
+		// Use Wordpress for escaping!
+		$this->wpdb()->escape_by_ref($value);
+		// Chaining.
+		return $this;
+	}
+
+	/**
+	* put your comment there...
+	* 
+	* @param mixed $name
+	*/
+	public function escapeField($name) {
+		return "`{$name}`";
+	}
+
+	/**
+	* put your comment there...
+	* 
+	* @param String Database object name.
 	*/
 	public function getDBOPrefix($object = '') {
 		// Initialize.
@@ -109,6 +130,15 @@ class UBP_Lib_Db_Driver extends UBP_Lib_Object {
 		}
 		// Chaining.
 		return $result;
+	}
+
+	/**
+	* put your comment there...
+	* 
+	* @param mixed $value
+	*/
+	public function quote(& $value) {
+		$value = "'{$value}'";
 	}
 
 	/**

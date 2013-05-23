@@ -44,7 +44,10 @@ class UBP_Accesspoint_Log extends UBP_Lib_Object {
 	*/
 	public function _snap($code, $message, $file, $line, $context) {
 		// Take a snap only if the error is laying under a Plugin!
-		if (UBP_Wordpress_Plugin_Helper::isPluginFile($file)) {
+		if ($pluginFile = UBP_Wordpress_Plugin_Helper::isPluginFile($file)) {
+			// Use Plugin relative file instead of the Absolute.
+			$file = $pluginFile['rel'];
+			// Hold a snap!
 			$this->snaps[] = compact('code', 'message', 'file', 'line', 'context');			
 		}		
 		// UBP never handle error, its just log it!

@@ -9,24 +9,32 @@ defined('ABSPATH') or die(NO_DIRECT_ACCESS_MSG);
 /**
 * 
 */
-class UBP_Lib_Db_Command_Ddl_Create extends UBP_Lib_Db_Command_Ddl {
+abstract class UBP_Lib_Db_Command_Ddl_Create extends UBP_Lib_Object {
+
+	/**
+	* put your comment there...
+	* 
+	* @var mixed
+	*/
+	protected $driver = null;
 	
 	/**
-	* Build command query.
+	* put your comment there...
 	* 
+	* @var mixed
 	*/
-	public function __toString() {
-		// Initialize.
-		$driver =& $this->getDriver();
-		$dbo =& $this->getDBO();
-		// Get table name.
-		$dboName = $driver->getDBOPrefix($dbo->name());
-		// Get DBO definition raw string to execute!
-		$dboRawDefinition = (string) $dbo->getDefinition();
-		// Build CREATE TABLE statement.
-		$query = "CREATE TABLE IF NOT EXISTS`{$dboName}`{$dboRawDefinition}";
-		// Return string query!
-		return $query;
+	protected $dboDefinition = null;
+	
+	/**
+	* put your comment there...
+	* 
+	* @param mixed $driver
+	* @param mixed $definition
+	* @return UBP_Lib_Db_Command_Ddl_Create
+	*/
+	public function __construct(& $driver, & $dboDefinition) {
+		$this->driver =& $driver;
+		$this->dboDefinition =& $dboDefinition;
 	}
 
 	/**
@@ -39,6 +47,22 @@ class UBP_Lib_Db_Command_Ddl_Create extends UBP_Lib_Db_Command_Ddl {
 		$query = (string) $this;
 		// Execute query.
 		return $this->driver->query($query);
+	}
+
+	/**
+	* put your comment there...
+	* 
+	*/
+	protected function & getDefinition() {
+		return $this->dboDefinition;
+	}
+
+	/**
+	* put your comment there...
+	* 
+	*/
+	public function & getDriver() {
+		return $this->driver;
 	}
 
 } // End class.

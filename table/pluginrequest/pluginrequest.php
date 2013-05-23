@@ -18,4 +18,21 @@ class  UBP_Table_Pluginrequest extends UBP_Lib_Db_Table {
 	*/
 	protected $name = 'plugin_request';
 	
+	/**
+	* put your comment there...
+	* 
+	*/
+	public function getURL() {
+		
+	}
+	
+	/**
+	* put your comment there...
+	* 
+	* @param mixed $url
+	*/
+	public function setURL($url) {
+		
+	}
+
 } // End class.

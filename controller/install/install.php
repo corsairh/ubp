@@ -23,10 +23,11 @@ class UBP_Controller_Install extends UBP_Lib_Mvc_Controller {
 		// Get all table classes and call 'create' method.
 		$tablesClass = $loader->getDirectoryClasses('table');
 		foreach ($tablesClass as $tableClass) {
-			// Instantiate the table.
-			$table = $loader->getClassInstance($tableClass);
+			// Load Table definition from the XML file.
+			$tblDefinition = UBP_Lib_Reader_Db_Dbo_Definition_Xml_Table::loadFromClassFile($tableClass);
 			// Create the table.
-			$dbDriver->createCommand('ddl', 'create', array($table))->exec();
+			$cmdCreate = $dbDriver->createCommand('ddl/create', 'table', array($tblDefinition));
+			$cmdCreate->exec();
 		}
 		// Get Plugin settings.
 		$loader->getInstanceOf('setting', 'application')

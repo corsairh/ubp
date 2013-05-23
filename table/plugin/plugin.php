@@ -23,7 +23,7 @@ class  UBP_Table_Plugin extends UBP_Lib_Db_Table {
 	* 
 	*/
 	public function getFile() {
-		return $this->get('file');
+		return $this->getValueOf('file');
 	}
 	
 	/**
@@ -32,7 +32,7 @@ class  UBP_Table_Plugin extends UBP_Lib_Db_Table {
 	* @param mixed $value
 	*/
 	public function setFile($value) {
-		return $this->set('file', $value);
+		return $this->setValueOf('file', $value);
 	}
 
 	/**
@@ -40,7 +40,7 @@ class  UBP_Table_Plugin extends UBP_Lib_Db_Table {
 	* 
 	*/
 	public function getId() {
-		return $this->get('id');
+		return $this->getValueOf('id');
 	}
 	
 	/**
@@ -54,7 +54,7 @@ class  UBP_Table_Plugin extends UBP_Lib_Db_Table {
 			throw new Exception('Invalid Plugin Id value! Id must be numeric and not zero!');
 		}
 		// Set.
-		return $this->set('id', $value);
+		return $this->setValueOf('id', $value);
 	}
 
 } // End class.
